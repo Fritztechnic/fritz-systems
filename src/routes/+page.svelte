@@ -2,6 +2,7 @@
   import ClusterDiagram from '#lib/ClusterDiagram.svelte';
   import Arrow from '#lib/Arrow.svelte';
   import { projects } from '#lib/projects.js';
+  import { posts, formatDate } from '#lib/posts.js';
 </script>
 
 <svelte:head>
@@ -40,6 +41,21 @@
     {/each}
   </ul>
 </section>
+
+{#if posts.length}
+  <section class="band latest">
+    <h2><span class="n">02</span> Zuletzt im Blog</h2>
+    <ol class="posts">
+      {#each posts.slice(0, 3) as p}
+        <li>
+          <time datetime={p.date}>{formatDate(p.date)}</time>
+          <a href="/blog/{p.slug}/">{p.title}</a>
+        </li>
+      {/each}
+    </ol>
+    <p class="more"><a href="/blog/">Alle Beiträge <Arrow /></a></p>
+  </section>
+{/if}
 
 <style>
   .hero {
@@ -97,6 +113,15 @@
   .rows p { color: var(--muted); max-width: 40rem; }
   .stack { font: 0.8125rem/1.7 var(--mono); color: var(--fg) !important; }
 
+  .latest { margin-top: var(--s5); }
+  .posts { margin: 0; padding: 0; list-style: none; }
+  .posts li { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: var(--s3); padding-block: 1.1rem; border-bottom: 1px solid var(--rule); align-items: baseline; }
+  .posts time { font: 0.8125rem var(--mono); color: var(--muted); }
+  .posts li a { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.015em; text-decoration: none; }
+  .posts li a:hover { color: var(--signal); }
+  .more { margin-top: var(--s2); font: 0.875rem var(--mono); }
+  .more a { display: inline-flex; align-items: center; gap: 0.6rem; }
+
   @media (max-width: 60rem) {
     .hero { grid-template-columns: 1fr; gap: var(--s4); padding-block: var(--s3) var(--s4); }
     .art { justify-self: start; }
@@ -104,6 +129,7 @@
   @media (max-width: 45rem) {
     .rows li { grid-template-columns: 1fr; gap: var(--s1); }
     .idx { padding: 0; }
+    .posts li { grid-template-columns: 1fr; gap: 0; }
     .actions a { flex: 1 1 100%; justify-content: space-between; }
   }
   @media (prefers-reduced-motion: reduce) { .actions a { transition: none; } }
