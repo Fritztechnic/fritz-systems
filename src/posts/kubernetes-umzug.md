@@ -1,65 +1,56 @@
 ---
-title: Warum die Plattform auf Kubernetes umgezogen ist
+title: Warum VioServe auf Kubernetes umgezogen ist
 date: '2026-11-20'
-summary: 'Von einzelnen VMs zu einem Drei-Knoten-Cluster mit GitOps: was besser wurde, wo es hakte und warum Schreibzugriffe auf replizierten Speicher teuer sind.'
+summary: 'Von einzelnen VMs zu drei Knoten mit GitOps. Was sich verbessert hat, was mich Nerven gekostet hat, und was ich über langsame Schreibzugriffe gemessen habe.'
 ---
 
-VioServe lief lange auf einzelnen virtuellen Maschinen. Jeder Dienst hatte seine VM, jede VM ihre eigene Handarbeit: per SSH rein, Datei ändern, Dienst neu starten. Das geht gut, solange man weiß, was man wann geändert hat. Mit mehreren Diensten und zwei Leuten im Team wusste ich das irgendwann nicht mehr. Hier steht, was ich stattdessen gebaut habe und wo es hakte.
+Früher hatte bei VioServe jeder Dienst seine eigene VM. Wollte ich etwas ändern, ging ich per SSH drauf, bearbeitete eine Datei und startete den Dienst neu. Mit zwei Diensten klappt das. Mit mehr Diensten und einem zweiten Menschen im Team kam der Punkt, an dem ich nicht mehr sicher sagen konnte, was auf welchem Server eigentlich eingestellt ist. Wenn Mike fragte, musste ich nachsehen, und nachsehen hieß: einloggen.
 
-## Das Ziel
+Also habe ich die Plattform auf einen Kubernetes-Cluster umgezogen. Hier steht, wie der aussieht und wo es hakte.
 
-Ich wollte:
+## Was ich wollte
 
-- Jede Änderung ist nachvollziehbar, also ein Commit statt eines Befehls im Terminal.
-- Ein ausgefallener Server ist kein Notfall mehr.
-- Den Stand der Plattform kann ich aus einem Repository wiederherstellen.
+Ich wollte, dass jede Änderung ein Commit ist, den man lesen und zurückdrehen kann. Ich wollte, dass ein ausgefallener Server kein Notfall mehr ist. Und ich wollte den Zustand der Plattform aus einem Repository wiederherstellen können, falls mal etwas ganz weg ist. Dafür gibt es mehrere Wege. Ich habe Kubernetes genommen, weil ich es sowieso lernen wollte.
 
-Dafür gibt es andere Lösungen. Ich habe Kubernetes genommen, weil ich es ohnehin lernen wollte.
+## Wie der Cluster aufgebaut ist
 
-## Der Aufbau
+Der Cluster läuft mit RKE2 auf drei Knoten. Zwei davon stehen auf dem Proxmox-Host Helios1, einer auf Chronos1. Drei Knoten reichen für ein etcd-Quorum, einer darf also ausfallen.
 
-Der Cluster nutzt RKE2 mit drei Knoten. Zwei davon stehen auf dem Proxmox-Host Helios1, einer auf Chronos1. Drei Knoten bilden ein Quorum für etcd, einer darf also ausfallen.
+Argo CD gleicht den Cluster ständig mit einem Git-Repository ab. Traefik nimmt die Anfragen an, cert-manager holt die Zertifikate, Longhorn repliziert den Speicher auf mehrere Knoten, und Cilium vergibt die Adressen der Dienste. Jede App hat im Repository einen Ordner mit ihren Manifesten und eine Argo-Application, die darauf zeigt. Eine neue App besteht aus einem neuen Ordner und einem Pull Request. Nach dem Merge kümmert sich Argo um den Rest.
 
-Die Bausteine:
+## Der Alltag mit GitOps
 
-- Argo CD gleicht den Cluster mit einem Git-Repository ab.
-- Traefik nimmt Anfragen an und verteilt sie.
-- cert-manager besorgt Zertifikate.
-- Longhorn stellt Speicher bereit, der auf mehrere Knoten repliziert wird.
-- Cilium vergibt die internen und öffentlichen Adressen der Dienste.
+Ich ändere eine Datei auf einem Branch und öffne einen Pull Request. Im Diff sehe ich, was sich ändert, und Mike sieht es auch. Nach dem Merge zieht Argo den neuen Stand. Geht etwas schief, revertiere ich den Commit.
 
-Jede App hat im Repository einen Ordner mit ihren Manifesten und eine Argo-Application, die darauf zeigt. Eine neue App anzulegen heißt: Ordner anlegen, Pull Request öffnen, mergen. Den Rest erledigt Argo.
+Das Schöne daran ist weniger die Automatik als der eine Ort. Wenn ich wissen will, welche Adresse ein Dienst hat, schaue ich ins Repository.
 
-## GitOps im Alltag
+## Was nicht so schön war
 
-Der Ablauf ist langweilig, und so soll er sein. Ich ändere eine Datei auf einem Branch, öffne einen Pull Request und sehe im Diff genau, was sich ändert. Nach dem Merge zieht Argo den neuen Stand. Wenn etwas schiefgeht, mache ich den Commit rückgängig.
+### Replizierter Speicher ist langsam
 
-Am meisten bringt mir, dass der Stand der Plattform an einem Ort steht, nicht die Automatisierung. Wenn ich wissen will, welche Adresse ein Dienst hat, schaue ich ins Repository und nicht auf den Server.
+Longhorn bestätigt einen Schreibzugriff erst, wenn alle Replikate ihn haben. Das kostet Zeit, und ich wollte wissen, wie viel. Ich habe auf einem Knoten fio laufen lassen, mit 4k-Schreibzugriffen und fsync nach jedem Schreiben, also so, wie es eine Datenbank macht.
 
-## Was dabei hakte
+Mit drei Replikaten über alle Knoten schaffte der Test rund 15 IOPS. Das p99 der fsync-Latenz lag bei etwa 405 ms. Mit zwei Replikaten waren es rund 24 IOPS und 218 ms. Ich hatte das Netzwerk zwischen den Hosts im Verdacht.
 
-### Replizierter Speicher ist langsamer
+Also habe ich die Replikate auf die beiden Knoten von Helios1 beschränkt. Das Ergebnis: rund 69 IOPS bei etwa 1,8 ms. Ein einzelnes lokales Replikat kam auf rund 80 IOPS und 4,8 ms. Der Weg zwischen den Hosts war also der größte Posten. Dahinter bleibt ein zweiter: Auf Helios1 liegt ZFS auf einer einzelnen Consumer-NVMe ohne Schutz gegen Stromausfall, und fsync muss dort auf das tatsächliche Wegschreiben warten.
 
-Longhorn schreibt synchron auf mehrere Knoten. Ein Schreibzugriff ist erst fertig, wenn alle Replikate ihn bestätigt haben. Ich wollte wissen, wie viel das kostet, und habe mit fio gemessen: 4k-Schreibzugriffe mit fsync, auf einem Knoten.
+Synchrones Schreiben abzuschalten, wäre die schnelle Lösung gewesen, und ich lasse es. Dann stünden die Zahlen besser da, aber bei einem Ausfall fehlten genau die Daten, für die ich die Replikation überhaupt habe. Der Preis für Replikate nur auf Helios1 ist ein anderer: Fällt der Host aus, sind alle Kopien weg. Dann zählen nur noch die Backups.
 
-Mit drei Replikaten über alle Knoten kam ich auf rund 15 IOPS, der p99 der fsync-Latenz lag bei etwa 405 ms. Mit zwei Replikaten waren es rund 24 IOPS und 218 ms. Der Verdacht lag nahe, dass das Netzwerk zwischen den Hosts schuld ist.
+### Argo löscht keine Daten
 
-Dann habe ich beide Replikate auf die beiden Knoten desselben Hosts gelegt. Ergebnis: rund 69 IOPS und etwa 1,8 ms p99. Ein einzelnes lokales Replikat schaffte rund 80 IOPS bei 4,8 ms. Die Latenz kam also vom Weg zwischen den Hosts. Der Speicher selbst ist eine einzelne Consumer-NVMe mit ZFS darüber, ohne Schutz gegen Stromausfall, und fsync wartet dort ohnehin auf das Wegschreiben.
+Als ich eine App wieder entfernt habe, räumte Argo Deployments, Services und Ingresses ab. Volume und Namespace blieben. Das ist Absicht, denn Argo fasst Daten nicht an. Bei mir kommt hinzu, dass die Longhorn-Volumes die Reclaim-Policy `Retain` haben. Nach dem Löschen des Claims steht das Volume im Zustand `Released`, bis ich es selbst entferne. Das schützt vor Fehlern, heißt aber, dass ich nach jedem Rückbau nachsehen muss, was übrig ist.
 
-Synchrones Schreiben abzuschalten, um die Zahlen zu verbessern, kommt für mich nicht in Frage. Dann würden bei einem Ausfall genau die Daten fehlen, für die ich die Replikation eingerichtet habe. Der Preis für Replikate auf nur einem Host ist ein anderer: Fällt dieser Host aus, sind alle Kopien weg. Dagegen helfen nur Backups.
+Hängt eine App an einem alten Stand des Repositories, hilft ein harter Refresh:
 
-### Argo räumt nicht alles weg
+```sh
+kubectl -n argocd annotate app portfolio \
+  argocd.argoproj.io/refresh=hard --overwrite
+```
 
-Als ich eine App wieder entfernt habe, hat Argo die Deployments, Services und Ingresses gelöscht, aber das Volume und der Namespace blieben stehen. Das ist Absicht: Argo löscht keine Daten, die es für wertvoll hält. Aufräumen musste ich von Hand.
+### Feste Adressen
 
-Dazu kommt, dass meine Longhorn-Volumes die Reclaim-Policy `Retain` haben. Auch nach dem Löschen des Claims bleibt das eigentliche Volume im Zustand `Released` bestehen, bis ich es selbst entferne. Das schützt vor versehentlichem Datenverlust, bedeutet aber, dass ich nach jedem Rückbau prüfen muss, was übrig ist.
+Cilium vergibt Adressen aus Pools. Damit ein Dienst immer dieselbe bekommt, reicht der Pool nicht, der Service braucht zusätzlich eine Annotation mit der Wunschadresse. Für interne Dienste habe ich einen eigenen kleinen Pool angelegt und den Zugriff auf die internen Netze begrenzt.
 
-### Feste Adressen für Dienste
+## Würde ich es wieder tun?
 
-Cilium vergibt Adressen aus Pools. Damit ein Dienst immer dieselbe Adresse bekommt, reicht der Pool allein nicht. Ich hänge dem Service zusätzlich eine Annotation an, die die gewünschte Adresse festlegt. Für interne Dienste lege ich dafür einen eigenen kleinen Pool an und beschränke den Zugriff auf die internen Netze.
-
-## Wann sich das lohnt
-
-Am Anfang war es deutlich mehr Aufwand als eine VM mit Docker. Für einen einzelnen Dienst würde ich es nicht machen. Mit mehreren Diensten, mehreren Leuten und dem Wunsch, alles wiederherstellen zu können, hat es sich für mich gelohnt.
-
-Im nächsten Beitrag geht es darum, wie ich eigene Images ohne Registry in den Cluster bekomme.
+Für einen einzelnen Dienst nicht. Der Aufwand am Anfang war deutlich höher als bei einer VM mit Docker. Bei mehreren Diensten, zwei Leuten im Team und dem Wunsch, alles wiederherstellen zu können, hat es sich gelohnt. Wie ich eigene Images ohne Registry auf die Knoten bekomme, steht im nächsten Beitrag.
