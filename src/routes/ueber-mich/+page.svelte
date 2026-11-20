@@ -1,14 +1,14 @@
 <svelte:head>
   <title>Über mich – Fritz Israel</title>
-  <meta name="description" content="Fritz Israel, Software- und Webentwickler aus Königswinter." />
+  <meta name="description" content="Fritz Israel, Schüler und Webentwickler aus Königswinter: Erfahrung, Sprachen und Werkzeuge." />
 </svelte:head>
 
 <article class="prose">
   <h1>Über mich</h1>
   <p>
-    Ich bin Fritz, Schüler und Webentwickler aus Königswinter. Ich baue Software gern von der
-    Anwendung bis zum Server, weil man dabei am meisten darüber lernt, was im Betrieb wirklich
-    kaputtgeht. Fast alles davon habe ich mir selbst beigebracht.
+    Ich bin Fritz, Schüler und Webentwickler aus Königswinter. Am liebsten baue ich etwas vom
+    Code bis zum Server, denn erst im Betrieb zeigt sich, was wirklich kaputtgeht. Das meiste
+    habe ich mir selbst beigebracht, und VioServe ist dafür mein Übungsfeld mit echten Kunden.
   </p>
 
   <h2>Erfahrung</h2>

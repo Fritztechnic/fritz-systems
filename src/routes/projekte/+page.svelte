@@ -4,12 +4,12 @@
 
 <svelte:head>
   <title>Projekte – Fritz Israel</title>
-  <meta name="description" content="VioServe, Kubernetes-Plattform, Netz und Überwachung." />
+  <meta name="description" content="Projekte von Fritz Israel: VioServe, Kubernetes-Plattform, Netz und Überwachung." />
 </svelte:head>
 
 <article class="prose wide">
   <h1>Projekte</h1>
-  <p class="lead">Was ich baue und betreibe. Mehr Hintergrund gibt es im <a href="/blog/">Blog</a>.</p>
+  <p class="lead">Was ich baue und betreibe, mit den Werkzeugen dahinter. Was dabei schiefging, steht im <a href="/blog/">Blog</a>.</p>
 
   {#each projects as p, i}
     <section id={p.id}>

@@ -4,7 +4,7 @@
 
 <svelte:head>
   <title>Blog – Fritz Israel</title>
-  <meta name="description" content="Notizen zu Infrastruktur, Kubernetes und Betrieb." />
+  <meta name="description" content="Notizen aus dem Betrieb: was ich gebaut habe und was dabei schiefging." />
 </svelte:head>
 
 <section class="prose wide">

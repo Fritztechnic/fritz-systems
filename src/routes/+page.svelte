@@ -1,5 +1,4 @@
 <script>
-  import InfraDiagram from '#lib/InfraDiagram.svelte';
   import Arrow from '#lib/Arrow.svelte';
   import { projects } from '#lib/projects.js';
   import { posts, formatDate } from '#lib/posts.js';
@@ -7,23 +6,27 @@
 
 <svelte:head>
   <title>Fritz Israel – Software und Infrastruktur</title>
-  <meta name="description" content="Fritz Israel, Software- und Webentwickler aus Königswinter. Betreibt VioServe, ein Hosting-Angebot, auf eigener Infrastruktur." />
+  <meta name="description" content="Fritz Israel, Schüler und Webentwickler aus Königswinter. Baut und betreibt VioServe, Hosting für Game-Server, VPS und Webseiten." />
 </svelte:head>
 
 <section class="hero">
+  <h1>Fritz<br />Israel</h1>
   <div class="text">
-    <h1>Fritz<br />Israel</h1>
     <p class="intro">
-      Ich entwickle Software und betreibe die Infrastruktur, auf der sie läuft.
-      Schüler und Webentwickler aus Königswinter, nebenbei Betreiber von VioServe.
+      Ich schreibe Software und betreibe die Server, auf denen sie läuft. Ich bin Schüler
+      und komme aus Königswinter.
     </p>
+    <dl class="facts">
+      <div><dt>Baut</dt><dd>VioServe, Hosting für Game-Server, VPS und Webseiten. Ich bin dort Gründer und schreibe Backend, Frontend und Betrieb.</dd></div>
+      <div><dt>Arbeitet mit</dt><dd>Laravel, Next.js, SvelteKit, ASP.NET Core, Linux, Kubernetes, MikroTik</dd></div>
+      <div><dt>Lernt gerade</dt><dd>C# und Rust, dazu Netzwerktechnik und Automation mit Siemens S7</dd></div>
+    </dl>
     <p class="actions">
       <a class="primary" href="/projekte/">Projekte <Arrow /></a>
       <a href="/blog/">Blog <Arrow /></a>
       <a href="mailto:fritz.israel.tech@outlook.de">E-Mail <Arrow /></a>
     </p>
   </div>
-  <div class="art"><InfraDiagram /></div>
 </section>
 
 <section class="band">
@@ -84,8 +87,11 @@
   }
   .actions .primary { background: var(--fg); color: var(--bg); }
   .actions a:hover { background: var(--signal); border-color: var(--signal); color: var(--on-signal); }
-  .text { position: sticky; top: var(--s4); }
-  .art { justify-self: end; width: 100%; }
+  .facts { margin: 0 0 var(--s3); max-width: 34rem; }
+  .facts div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: var(--s2); padding-block: 0.8rem; border-top: 1px solid var(--rule); }
+  .facts div:last-child { border-bottom: 1px solid var(--rule); }
+  .facts dt { font: 700 0.8125rem var(--mono); padding-top: 0.15rem; }
+  .facts dd { margin: 0; font-size: 0.9375rem; line-height: 1.5; }
 
   .band h2 {
     display: flex;
@@ -123,11 +129,10 @@
 
   @media (max-width: 60rem) {
     .hero { grid-template-columns: 1fr; gap: var(--s4); padding-block: var(--s3) var(--s4); }
-    .art { justify-self: start; }
-    .text { position: static; }
   }
   @media (max-width: 45rem) {
     .rows li { grid-template-columns: 1fr; gap: var(--s1); }
+    .facts div { grid-template-columns: 1fr; gap: 0; }
     .posts li { grid-template-columns: 1fr; gap: 0; }
     .actions a { flex: 1 1 100%; justify-content: space-between; }
   }
