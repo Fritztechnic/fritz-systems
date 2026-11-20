@@ -1,11 +1,13 @@
 <footer>
   <span>© {new Date().getFullYear()} Fritz Israel · Königswinter</span>
-  <span>
+  <span class="links">
+    <a href="/impressum/">Impressum</a>
     <a href="https://github.com/Fritztechnic/fritz-systems" rel="noopener">Quellcode</a>
   </span>
 </footer>
 
 <style>
+  .links { display: flex; gap: var(--s2); }
   footer {
     display: flex;
     flex-wrap: wrap;
