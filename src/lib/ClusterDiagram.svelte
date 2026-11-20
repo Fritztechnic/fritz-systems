@@ -45,17 +45,17 @@
 <style>
   svg { display: block; width: 100%; height: auto; max-width: 34rem; }
   .line { fill: none; stroke: var(--fg); stroke-width: 2; }
-  .flow { stroke-dasharray: 3 7; animation: flow 1.4s linear infinite; }
+  .flow { stroke-dasharray: 7 6; animation: flow 1.2s linear infinite; }
   .deploy { stroke: var(--signal); }
   .box rect, .cluster, .store { fill: var(--bg); stroke: var(--fg); stroke-width: 2; }
   .cluster { fill: var(--tint); stroke-dasharray: 2 6; stroke: var(--muted); stroke-width: 1.5; }
   .box .hot { fill: var(--signal); stroke: var(--signal); }
   .store { fill: none; stroke-width: 1.5; }
-  .pod { fill: var(--fg); opacity: 0.85; }
+  .pod { fill: var(--muted); opacity: 0.45; }
   .label { fill: var(--fg); font: 700 13px var(--mono); }
   .label.small { font-weight: 500; font-size: 11.5px; fill: var(--muted); }
   .on-hot { fill: var(--on-signal); }
 
-  @keyframes flow { to { stroke-dashoffset: -20; } }
+  @keyframes flow { to { stroke-dashoffset: -13; } }
   @media (prefers-reduced-motion: reduce) { .flow { animation: none; } }
 </style>
