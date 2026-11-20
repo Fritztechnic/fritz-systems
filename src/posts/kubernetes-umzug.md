@@ -1,7 +1,7 @@
 ---
 title: Warum die Plattform auf Kubernetes umgezogen ist
 date: '2026-11-20'
-summary: Von einzelnen VMs zu einem Drei-Knoten-Cluster mit GitOps: was besser wurde, wo es hakte und warum Schreibzugriffe auf replizierten Speicher teuer sind.
+summary: 'Von einzelnen VMs zu einem Drei-Knoten-Cluster mit GitOps: was besser wurde, wo es hakte und warum Schreibzugriffe auf replizierten Speicher teuer sind.'
 ---
 
 VioServe lief lange auf einzelnen virtuellen Maschinen. Jeder Dienst hatte seine VM, jede VM ihre eigene Handarbeit: per SSH rein, Datei ändern, Dienst neu starten. Das geht gut, solange man weiß, was man wann geändert hat. Mit mehreren Diensten und zwei Leuten im Team wusste ich das irgendwann nicht mehr. Hier steht, was ich stattdessen gebaut habe und wo es hakte.
