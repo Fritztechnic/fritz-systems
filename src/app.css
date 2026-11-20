@@ -64,3 +64,41 @@ p { margin: 0; }
   html { scroll-behavior: auto; }
   body { transition: none; }
 }
+
+/* Textseiten und Blogbeiträge */
+.prose { max-width: 42rem; padding-block: var(--s3) var(--s4); }
+.prose.wide { max-width: none; }
+.prose h1 {
+  margin-bottom: var(--s3);
+  font-size: clamp(2.25rem, 5.5vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+.prose h2 {
+  margin: var(--s4) 0 var(--s1);
+  padding-top: var(--s2);
+  border-top: 1px solid var(--rule);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.prose h3 { margin: var(--s3) 0 var(--s1); font-size: 1.25rem; font-weight: 700; }
+.prose p, .prose ul, .prose ol { margin: 0 0 1.1rem; }
+.prose li { margin-bottom: 0.35rem; }
+.prose li::marker { color: var(--signal); }
+.prose .meta { margin-bottom: var(--s2); font: 0.8125rem var(--mono); color: var(--muted); }
+.prose blockquote { margin: 1.5rem 0; padding-left: var(--s2); border-left: 3px solid var(--signal); color: var(--muted); }
+.prose code { padding: 0.1em 0.35em; background: var(--tint); font: 0.9em var(--mono); }
+.prose pre {
+  overflow-x: auto;
+  margin: 0 0 1.4rem;
+  padding: var(--s2);
+  background: var(--tint);
+  border: 1px solid var(--rule);
+  font: 0.875rem/1.6 var(--mono);
+}
+.prose pre code { padding: 0; background: none; }
+.prose table { width: 100%; margin-bottom: 1.4rem; border-collapse: collapse; font-size: 0.95rem; }
+.prose th, .prose td { padding: 0.5rem 0.75rem 0.5rem 0; border-bottom: 1px solid var(--rule); text-align: left; }
+.prose img { max-width: 100%; height: auto; }
