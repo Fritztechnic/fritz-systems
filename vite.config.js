@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     mdsvex({ extensions: ['.md'] }),
     sveltekit({
-      adapter: adapter(),
+      adapter: adapter({ fallback: '404.html' }),
       prerender: { handleHttpError: 'fail' }
     })
   ]
