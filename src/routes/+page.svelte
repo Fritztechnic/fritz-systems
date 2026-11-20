@@ -21,7 +21,7 @@
     <dl class="facts">
       <div><dt>Baut</dt><dd>VioServe, Hosting für Game-Server, VPS und Webseiten. Ich bin dort Gründer und schreibe Backend, Frontend und Betrieb.</dd></div>
       <div><dt>Arbeitet mit</dt><dd class="tools">{#each tools as t}<Tech name={t} />{/each}</dd></div>
-      <div><dt>Lernt gerade</dt><dd>C# und Rust, dazu Netzwerktechnik und Automation mit Siemens S7</dd></div>
+      <div><dt>Lernt gerade</dt><dd>C# und Netzwerktechnik</dd></div>
     </dl>
     <p class="actions">
       <a class="primary" href="/projekte/">Projekte <Arrow /></a>

@@ -5,7 +5,7 @@
 
 <article class="prose">
   <h1>Kontakt</h1>
-  <p>Schreib mir bei Fragen zu meinen Projekten oder wenn du zusammenarbeiten möchtest. Ich antworte meist innerhalb weniger Tage.</p>
+  <p>Schreib mir bei Fragen zu meinen Projekten oder wenn du zusammenarbeiten möchtest.</p>
   <p class="mail"><a href="mailto:fritz.israel.tech@outlook.de">fritz.israel.tech@outlook.de</a></p>
   <p>Code und Konfigurationen liegen auf <a href="https://github.com/Fritztechnic" rel="noopener">github.com/Fritztechnic</a>.</p>
 </article>
