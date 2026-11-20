@@ -13,7 +13,7 @@ spec:
       containers:
         - name: web
           # Image liegt per `ctr import` auf allen Nodes; kein Registry-Pull.
-          image: docker.io/library/fritz-systems:6
+          image: docker.io/library/fritz-systems:7
           imagePullPolicy: IfNotPresent
           ports:
             - {containerPort: 8080, name: http}
