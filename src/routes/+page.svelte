@@ -1,5 +1,5 @@
 <script>
-  import ClusterDiagram from '#lib/ClusterDiagram.svelte';
+  import InfraDiagram from '#lib/InfraDiagram.svelte';
   import Arrow from '#lib/Arrow.svelte';
   import { projects } from '#lib/projects.js';
   import { posts, formatDate } from '#lib/posts.js';
@@ -7,7 +7,7 @@
 
 <svelte:head>
   <title>Fritz Israel – Software und Infrastruktur</title>
-  <meta name="description" content="Fritz Israel, Software- und Webentwickler aus Königswinter. Betreibt VioServe auf einem eigenen Kubernetes-Cluster." />
+  <meta name="description" content="Fritz Israel, Software- und Webentwickler aus Königswinter. Betreibt VioServe, ein Hosting-Angebot, auf eigener Infrastruktur." />
 </svelte:head>
 
 <section class="hero">
@@ -23,7 +23,7 @@
       <a href="mailto:fritz.israel.tech@outlook.de">E-Mail <Arrow /></a>
     </p>
   </div>
-  <div class="art"><ClusterDiagram /></div>
+  <div class="art"><InfraDiagram /></div>
 </section>
 
 <section class="band">
@@ -61,7 +61,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     gap: var(--s4);
-    align-items: center;
+    align-items: start;
     padding-block: var(--s4) var(--s5);
   }
   h1 {
@@ -84,6 +84,7 @@
   }
   .actions .primary { background: var(--fg); color: var(--bg); }
   .actions a:hover { background: var(--signal); border-color: var(--signal); color: var(--on-signal); }
+  .text { position: sticky; top: var(--s4); }
   .art { justify-self: end; width: 100%; }
 
   .band h2 {
@@ -123,6 +124,7 @@
   @media (max-width: 60rem) {
     .hero { grid-template-columns: 1fr; gap: var(--s4); padding-block: var(--s3) var(--s4); }
     .art { justify-self: start; }
+    .text { position: static; }
   }
   @media (max-width: 45rem) {
     .rows li { grid-template-columns: 1fr; gap: var(--s1); }
