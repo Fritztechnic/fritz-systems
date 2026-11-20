@@ -5,9 +5,8 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [
+    mdsvex({ extensions: ['.md'] }),
     sveltekit({
-      extensions: ['.svelte', '.md'],
-      preprocess: [mdsvex({ extensions: ['.md'] })],
       adapter: adapter(),
       prerender: { handleHttpError: 'fail' }
     })
