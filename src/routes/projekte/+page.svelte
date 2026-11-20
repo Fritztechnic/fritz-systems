@@ -1,5 +1,6 @@
 <script>
   import { projects } from '#lib/projects.js';
+  import Tech from '#lib/Tech.svelte';
 </script>
 
 <svelte:head>
@@ -20,7 +21,7 @@
         {#if p.points.length}
           <ul>{#each p.points as pt}<li>{pt}</li>{/each}</ul>
         {/if}
-        <p class="stack">{p.stack.join(' · ')}</p>
+        <p class="stack">{#each p.stack as t}<Tech name={t} />{/each}</p>
         {#if p.link}<p><a href={p.link[0]} rel="noopener">{p.link[1]}</a></p>{/if}
       </div>
     </section>
@@ -38,6 +39,6 @@
   }
   .idx { font: 0.8125rem var(--mono); color: var(--signal); padding-top: 0.6rem; }
   section :global(h2) { margin: 0 0 var(--s2); padding: 0; border: 0; font-size: 2rem; }
-  .stack { font: 0.8125rem/1.7 var(--mono); color: var(--muted); }
+  .stack { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; font: 0.8125rem/1.7 var(--mono); }
   @media (max-width: 45rem) { section { grid-template-columns: 1fr; gap: 0; } .idx { padding: 0 0 var(--s1); } }
 </style>

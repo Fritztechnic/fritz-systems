@@ -1,5 +1,7 @@
 <script>
   import Arrow from '#lib/Arrow.svelte';
+  import Tech from '#lib/Tech.svelte';
+  const tools = ['Laravel', 'Next.js', 'SvelteKit', 'ASP.NET Core', 'Linux', 'Kubernetes', 'Argo CD', 'MikroTik', 'Proxmox VE', 'PostgreSQL'];
   import { projects } from '#lib/projects.js';
   import { posts, formatDate } from '#lib/posts.js';
 </script>
@@ -18,7 +20,7 @@
     </p>
     <dl class="facts">
       <div><dt>Baut</dt><dd>VioServe, Hosting für Game-Server, VPS und Webseiten. Ich bin dort Gründer und schreibe Backend, Frontend und Betrieb.</dd></div>
-      <div><dt>Arbeitet mit</dt><dd>Laravel, Next.js, SvelteKit, ASP.NET Core, Linux, Kubernetes, MikroTik</dd></div>
+      <div><dt>Arbeitet mit</dt><dd class="tools">{#each tools as t}<Tech name={t} />{/each}</dd></div>
       <div><dt>Lernt gerade</dt><dd>C# und Rust, dazu Netzwerktechnik und Automation mit Siemens S7</dd></div>
     </dl>
     <p class="actions">
@@ -38,7 +40,7 @@
           <h3><a href="/projekte/#{p.id}">{p.title}</a></h3>
           <p>{p.short}</p>
         </div>
-        <p class="stack">{p.stack.join(' · ')}</p>
+        <p class="stack">{#each p.stack as t}<Tech name={t} />{/each}</p>
       </li>
     {/each}
   </ul>
@@ -116,7 +118,8 @@
   h3 a { text-decoration: none; }
   h3 a:hover { text-decoration: underline; text-decoration-color: var(--signal); }
   .rows p { color: var(--muted); max-width: 40rem; }
-  .stack { font: 0.8125rem/1.7 var(--mono); color: var(--fg) !important; }
+  .stack { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; align-content: flex-start; font: 0.8125rem/1.7 var(--mono); color: var(--fg) !important; }
+  .tools { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; font: 0.8125rem/1.5 var(--mono); }
 
   .latest { margin-top: var(--s5); }
   .posts { margin: 0; padding: 0; list-style: none; }

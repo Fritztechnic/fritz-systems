@@ -1,3 +1,7 @@
+<script>
+  import Tech from '#lib/Tech.svelte';
+</script>
+
 <svelte:head>
   <title>Über mich – Fritz Israel</title>
   <meta name="description" content="Fritz Israel, Schüler und Webentwickler aus Königswinter: Erfahrung, Sprachen und Werkzeuge." />
@@ -36,13 +40,13 @@
 
   <h2>Womit ich arbeite</h2>
   <dl>
-    <div><dt>Sprachen</dt><dd>PHP (Laravel), TypeScript und JavaScript, HTML und CSS, Python, Java; C# und Rust teilweise</dd></div>
-    <div><dt>Frameworks</dt><dd>Laravel, Next.js, SvelteKit, ASP.NET Core</dd></div>
-    <div><dt>Betrieb</dt><dd>Linux, Docker, Kubernetes, Argo CD, Proxmox VE</dd></div>
-    <div><dt>Netz</dt><dd>MikroTik, EoIP, WireGuard, Routing und Subnetting, NAT, Traefik, DNS</dd></div>
-    <div><dt>Daten</dt><dd>MariaDB und MySQL, PostgreSQL, Redis, InfluxDB, Longhorn, Backups</dd></div>
-    <div><dt>Automation</dt><dd>Siemens S7 und TIA Portal mit HMI-Panels, mehrere Zertifikate</dd></div>
-    <div><dt>Bauen</dt><dd>Fusion 360 und 3D-Druck</dd></div>
+    <div><dt>Sprachen</dt><dd><span class="tags"><Tech name="PHP" /><Tech name="JavaScript" /><Tech name="TypeScript" /><Tech name="HTML" /><Tech name="CSS" /><Tech name="Python" /><Tech name="Java" /></span><small>Dazu C# und Rust in Teilen.</small></dd></div>
+    <div><dt>Frameworks</dt><dd><span class="tags"><Tech name="Laravel" /><Tech name="Next.js" /><Tech name="SvelteKit" /><Tech name="ASP.NET Core" /></span></dd></div>
+    <div><dt>Betrieb</dt><dd><span class="tags"><Tech name="Linux" /><Tech name="Docker" /><Tech name="Kubernetes" /><Tech name="Argo CD" /><Tech name="Proxmox VE" /></span></dd></div>
+    <div><dt>Netz</dt><dd><span class="tags"><Tech name="MikroTik" /><Tech name="WireGuard" /><Tech name="Traefik" /></span><small>Dazu EoIP, Routing, Subnetting, NAT und DNS.</small></dd></div>
+    <div><dt>Daten</dt><dd><span class="tags"><Tech name="MariaDB" /><Tech name="PostgreSQL" /><Tech name="Redis" /><Tech name="InfluxDB" /><Tech name="Longhorn" /></span><small>Dazu Backups.</small></dd></div>
+    <div><dt>Automation</dt><dd><span class="tags"><Tech name="Siemens S7" /></span><small>Mit TIA Portal und HMI-Panels, mehrere Zertifikate.</small></dd></div>
+    <div><dt>Bauen</dt><dd><span class="tags"><Tech name="Fusion 360" /></span><small>Dazu 3D-Druck.</small></dd></div>
   </dl>
 
   <h2>Interessen</h2>
@@ -54,6 +58,8 @@
   dl div { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: var(--s2); padding-block: 0.9rem; border-bottom: 1px solid var(--rule); }
   dt { font: 700 0.875rem var(--mono); }
   dd { margin: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; font: 0.875rem var(--mono); }
+  dd small { display: block; margin-top: 0.3rem; color: var(--muted); font-size: 0.875rem; }
   @media (max-width: 45rem) { dl div { grid-template-columns: 1fr; gap: 0; } }
   .timeline { list-style: none; margin: 0; padding: 0; }
   .timeline li { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: var(--s2); padding-block: 1rem; border-bottom: 1px solid var(--rule); }
