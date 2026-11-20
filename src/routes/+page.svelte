@@ -29,9 +29,8 @@
 <section class="band">
   <h2><span class="n">01</span> Woran ich arbeite</h2>
   <ul class="rows">
-    {#each projects.slice(0, 3) as p, i}
+    {#each projects.slice(0, 3) as p}
       <li>
-        <span class="idx">{String(i + 1).padStart(2, '0')}</span>
         <div>
           <h3><a href="/projekte/#{p.id}">{p.title}</a></h3>
           <p>{p.short}</p>
@@ -100,13 +99,12 @@
   .rows { margin: 0; padding: 0; list-style: none; }
   .rows li {
     display: grid;
-    grid-template-columns: 3.5rem minmax(0, 1fr) 16rem;
+    grid-template-columns: minmax(0, 1fr) 16rem;
     gap: var(--s3);
     padding-block: var(--s3);
     border-bottom: 1px solid var(--rule);
   }
   .rows li:first-child { padding-top: 0; }
-  .idx { font: 0.8125rem var(--mono); color: var(--muted); padding-top: 0.5rem; }
   h3 { margin-bottom: 0.35rem; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.015em; }
   h3 a { text-decoration: none; }
   h3 a:hover { text-decoration: underline; text-decoration-color: var(--signal); }
@@ -128,7 +126,6 @@
   }
   @media (max-width: 45rem) {
     .rows li { grid-template-columns: 1fr; gap: var(--s1); }
-    .idx { padding: 0; }
     .posts li { grid-template-columns: 1fr; gap: 0; }
     .actions a { flex: 1 1 100%; justify-content: space-between; }
   }
