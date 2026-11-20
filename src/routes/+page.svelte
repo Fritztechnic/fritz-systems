@@ -15,7 +15,7 @@
     <h1>Fritz<br />Israel</h1>
     <p class="intro">
       Ich entwickle Software und betreibe die Infrastruktur, auf der sie läuft.
-      Student und Webentwickler aus Königswinter, nebenbei Betreiber von VioServe.
+      Schüler und Webentwickler aus Königswinter, nebenbei Betreiber von VioServe.
     </p>
     <p class="actions">
       <a class="primary" href="/projekte/">Projekte <Arrow /></a>
